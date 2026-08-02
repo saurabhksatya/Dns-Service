@@ -134,7 +134,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 					Class:  dns.ClassINET,
 					Ttl:    300,
 				},
-				A: net.ParseIP("102.100.1.1"),
+				A: net.ParseIP("102.100.1.1 "),
 			}
 			msg.Answer = append(msg.Answer, rr)
 		}

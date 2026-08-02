@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Activity,
   ArrowRight,
@@ -12,13 +13,13 @@ import {
   ShieldCheck,
   Timer,
 } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {
     icon: HeartPulse,
     title: "Real-Time Health Checks",
-    description:
-      "Continuously monitor server availability and responsiveness.",
+    description: "Continuously monitor server availability and responsiveness.",
   },
   {
     icon: Route,
@@ -55,15 +56,32 @@ const steps = [
   },
   {
     title: "Smart Routing",
-    description:
-      "DNS responses automatically route users to healthy servers.",
+    description: "DNS responses automatically route users to healthy servers.",
   },
 ];
 
 const servers = [
-  { name: "Server A", status: "Healthy", color: "text-emerald-600", bg: "bg-emerald-100", dot: "bg-emerald-500" },
-  { name: "Server B", status: "Healthy", color: "text-emerald-600", bg: "bg-emerald-100", dot: "bg-emerald-500" },
-  { name: "Server C", status: "Unreachable", color: "text-red-600", bg: "bg-red-100", dot: "bg-red-500" },
+  {
+    name: "Server A",
+    status: "Healthy",
+    color: "text-emerald-600",
+    bg: "bg-emerald-100",
+    dot: "bg-emerald-500",
+  },
+  {
+    name: "Server B",
+    status: "Healthy",
+    color: "text-emerald-600",
+    bg: "bg-emerald-100",
+    dot: "bg-emerald-500",
+  },
+  {
+    name: "Server C",
+    status: "Unreachable",
+    color: "text-red-600",
+    bg: "bg-red-100",
+    dot: "bg-red-500",
+  },
 ];
 
 const benefits = [
@@ -130,7 +148,14 @@ function NetworkDiagram() {
       </pattern>
       <rect width="520" height="460" fill="url(#grid)" />
 
-      <text x={70} y={50} textAnchor="middle" fontSize="12" fill="#64748b" fontWeight={600}>
+      <text
+        x={70}
+        y={50}
+        textAnchor="middle"
+        fontSize="12"
+        fill="#64748b"
+        fontWeight={600}
+      >
         Global Users
       </text>
       <path d="M70 90 V200" stroke="#cbd5e1" strokeWidth="1.5" fill="none" />
@@ -139,8 +164,24 @@ function NetworkDiagram() {
       <Node cx={70} cy={200} color="#94a3b8" />
 
       {/* DNS router */}
-      <rect x={195} y={90} width={130} height={64} rx="14" fill="#ffffff" stroke="#10b981" strokeWidth="1.5" />
-      <text x={260} y={114} textAnchor="middle" fontSize="13" fontWeight={700} fill="#047857">
+      <rect
+        x={195}
+        y={90}
+        width={130}
+        height={64}
+        rx="14"
+        fill="#ffffff"
+        stroke="#10b981"
+        strokeWidth="1.5"
+      />
+      <text
+        x={260}
+        y={114}
+        textAnchor="middle"
+        fontSize="13"
+        fontWeight={700}
+        fill="#047857"
+      >
         DNS Router
       </text>
       <text x={260} y={132} textAnchor="middle" fontSize="11" fill="#10b981">
@@ -148,8 +189,24 @@ function NetworkDiagram() {
       </text>
 
       {/* server A */}
-      <rect x={40} y={340} width={112} height={72} rx="12" fill="#ffffff" stroke="#10b981" strokeWidth="1.5" />
-      <text x={96} y={364} textAnchor="middle" fontSize="12" fontWeight={700} fill="#0f172a">
+      <rect
+        x={40}
+        y={340}
+        width={112}
+        height={72}
+        rx="12"
+        fill="#ffffff"
+        stroke="#10b981"
+        strokeWidth="1.5"
+      />
+      <text
+        x={96}
+        y={364}
+        textAnchor="middle"
+        fontSize="12"
+        fontWeight={700}
+        fill="#0f172a"
+      >
         Server A
       </text>
       <circle cx={72} cy={386} r="4" fill="#10b981" />
@@ -158,8 +215,24 @@ function NetworkDiagram() {
       </text>
 
       {/* server B */}
-      <rect x={204} y={340} width={112} height={72} rx="12" fill="#ffffff" stroke="#10b981" strokeWidth="1.5" />
-      <text x={260} y={364} textAnchor="middle" fontSize="12" fontWeight={700} fill="#0f172a">
+      <rect
+        x={204}
+        y={340}
+        width={112}
+        height={72}
+        rx="12"
+        fill="#ffffff"
+        stroke="#10b981"
+        strokeWidth="1.5"
+      />
+      <text
+        x={260}
+        y={364}
+        textAnchor="middle"
+        fontSize="12"
+        fontWeight={700}
+        fill="#0f172a"
+      >
         Server B
       </text>
       <circle cx={236} cy={386} r="4" fill="#10b981" />
@@ -168,8 +241,24 @@ function NetworkDiagram() {
       </text>
 
       {/* server C (unreachable) */}
-      <rect x={368} y={340} width={112} height={72} rx="12" fill="#fef2f2" stroke="#ef4444" strokeWidth="1.5" />
-      <text x={424} y={364} textAnchor="middle" fontSize="12" fontWeight={700} fill="#991b1b">
+      <rect
+        x={368}
+        y={340}
+        width={112}
+        height={72}
+        rx="12"
+        fill="#fef2f2"
+        stroke="#ef4444"
+        strokeWidth="1.5"
+      />
+      <text
+        x={424}
+        y={364}
+        textAnchor="middle"
+        fontSize="12"
+        fontWeight={700}
+        fill="#991b1b"
+      >
         Server C
       </text>
       <circle cx={400} cy={386} r="4" fill="#ef4444" />
@@ -178,16 +267,52 @@ function NetworkDiagram() {
       </text>
 
       {/* users -> router (solid traffic) */}
-      <path d="M70 90 L195 102" stroke="#10b981" strokeWidth="2" fill="none" markerEnd="url(#arrow)" />
-      <path d="M70 145 L195 122" stroke="#10b981" strokeWidth="2" fill="none" markerEnd="url(#arrow)" />
-      <path d="M70 200 L195 142" stroke="#10b981" strokeWidth="2" fill="none" markerEnd="url(#arrow)" />
+      <path
+        d="M70 90 L195 102"
+        stroke="#10b981"
+        strokeWidth="2"
+        fill="none"
+        markerEnd="url(#arrow)"
+      />
+      <path
+        d="M70 145 L195 122"
+        stroke="#10b981"
+        strokeWidth="2"
+        fill="none"
+        markerEnd="url(#arrow)"
+      />
+      <path
+        d="M70 200 L195 142"
+        stroke="#10b981"
+        strokeWidth="2"
+        fill="none"
+        markerEnd="url(#arrow)"
+      />
 
       {/* router -> healthy servers (solid traffic) */}
-      <path d="M248 154 L96 340" stroke="#10b981" strokeWidth="2.5" fill="none" markerEnd="url(#arrow)" />
-      <path d="M272 154 L260 340" stroke="#10b981" strokeWidth="2.5" fill="none" markerEnd="url(#arrow)" />
+      <path
+        d="M248 154 L96 340"
+        stroke="#10b981"
+        strokeWidth="2.5"
+        fill="none"
+        markerEnd="url(#arrow)"
+      />
+      <path
+        d="M272 154 L260 340"
+        stroke="#10b981"
+        strokeWidth="2.5"
+        fill="none"
+        markerEnd="url(#arrow)"
+      />
 
       {/* router -> server C (blocked health check, red dashed with X) */}
-      <path d="M325 140 L424 340" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="5 4" fill="none" />
+      <path
+        d="M325 140 L424 340"
+        stroke="#ef4444"
+        strokeWidth="1.5"
+        strokeDasharray="5 4"
+        fill="none"
+      />
       <g stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round">
         <line x1={368} y1={228} x2={388} y2={248} />
         <line x1={388} y1={228} x2={368} y2={248} />
@@ -223,14 +348,19 @@ function DashboardCard() {
 
       <div className="divide-y divide-slate-100">
         {servers.map((server) => (
-          <div key={server.name} className="flex items-center justify-between px-5 py-3.5">
+          <div
+            key={server.name}
+            className="flex items-center justify-between px-5 py-3.5"
+          >
             <div className="flex items-center gap-3">
               <Server className="h-4 w-4 text-slate-400" />
               <span className="text-sm font-medium text-slate-700">
                 {server.name}
               </span>
             </div>
-            <span className={`inline-flex items-center gap-1.5 rounded-full ${server.bg} px-2.5 py-1 text-xs font-medium ${server.color}`}>
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full ${server.bg} px-2.5 py-1 text-xs font-medium ${server.color}`}
+            >
               <span className={`h-1.5 w-1.5 rounded-full ${server.dot}`} />
               {server.status}
             </span>
@@ -283,21 +413,12 @@ export default function Home() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            <a href="#features" className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900">
-              Features
-            </a>
-            <a href="#how-it-works" className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900">
-              How It Works
-            </a>
-            <a href="#monitoring" className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900">
-              Documentation
-            </a>
-          </nav>
-
-          <button className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all hover:border-emerald-500 hover:text-emerald-600">
+          <Link
+            href="/signin"
+            className="rounded-lg border cursor-pointer border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all hover:border-emerald-500 hover:text-emerald-600 hover:bg-white"
+          >
             Sign In
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -305,7 +426,11 @@ export default function Home() {
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.08),transparent_50%),radial-gradient(circle_at_20%_80%,rgba(20,184,166,0.06),transparent_50%)]" />
-            <svg className="absolute inset-0 h-full w-full opacity-[0.35]" viewBox="0 0 800 800" fill="none">
+            <svg
+              className="absolute inset-0 h-full w-full opacity-[0.35]"
+              viewBox="0 0 800 800"
+              fill="none"
+            >
               <g stroke="#10b981" strokeOpacity="0.12" strokeWidth="1">
                 <path d="M0 100 H800" />
                 <path d="M0 300 H800" />
@@ -314,10 +439,34 @@ export default function Home() {
                 <path d="M150 0 V800" />
                 <path d="M400 0 V800" />
                 <path d="M650 0 V800" />
-                <circle cx="400" cy="300" r="3" fill="#10b981" fillOpacity="0.2" />
-                <circle cx="150" cy="500" r="3" fill="#10b981" fillOpacity="0.2" />
-                <circle cx="650" cy="100" r="3" fill="#10b981" fillOpacity="0.2" />
-                <circle cx="650" cy="700" r="3" fill="#10b981" fillOpacity="0.2" />
+                <circle
+                  cx="400"
+                  cy="300"
+                  r="3"
+                  fill="#10b981"
+                  fillOpacity="0.2"
+                />
+                <circle
+                  cx="150"
+                  cy="500"
+                  r="3"
+                  fill="#10b981"
+                  fillOpacity="0.2"
+                />
+                <circle
+                  cx="650"
+                  cy="100"
+                  r="3"
+                  fill="#10b981"
+                  fillOpacity="0.2"
+                />
+                <circle
+                  cx="650"
+                  cy="700"
+                  r="3"
+                  fill="#10b981"
+                  fillOpacity="0.2"
+                />
               </g>
             </svg>
           </div>
@@ -360,14 +509,20 @@ export default function Home() {
 
             <div className="relative">
               <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-emerald-100/70 to-teal-100/50 blur-xl" />
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white/80 shadow-xl shadow-emerald-900/5 backdrop-blur-sm w-full max-w-[520px] mx-auto" style={{ aspectRatio: '520 / 460' }}>
+              <div
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white/80 shadow-xl shadow-emerald-900/5 backdrop-blur-sm w-full max-w-[520px] mx-auto"
+                style={{ aspectRatio: "520 / 460" }}
+              >
                 <NetworkDiagram />
               </div>
             </div>
           </div>
         </section>
 
-        <section id="features" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20">
+        <section
+          id="features"
+          className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20"
+        >
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
               Built for Reliable DNS Infrastructure
@@ -397,7 +552,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="how-it-works" className="border-y border-slate-200/70 bg-white scroll-mt-24">
+        <section
+          id="how-it-works"
+          className="border-y border-slate-200/70 bg-white scroll-mt-24"
+        >
           <div className="mx-auto max-w-7xl px-6 py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
@@ -414,10 +572,20 @@ export default function Home() {
                 preserveAspectRatio="none"
                 viewBox="0 0 100 1"
               >
-                <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="#d1fae5" strokeWidth="1" />
+                <line
+                  x1="0"
+                  y1="0.5"
+                  x2="100"
+                  y2="0.5"
+                  stroke="#d1fae5"
+                  strokeWidth="1"
+                />
               </svg>
               {steps.map((step, index) => (
-                <div key={step.title} className="relative flex flex-col items-center text-center md:items-start md:text-left">
+                <div
+                  key={step.title}
+                  className="relative flex flex-col items-center text-center md:items-start md:text-left"
+                >
                   <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white shadow-md shadow-emerald-600/25">
                     {index + 1}
                   </span>
@@ -431,7 +599,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="monitoring" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20">
+        <section
+          id="monitoring"
+          className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20"
+        >
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
@@ -451,7 +622,9 @@ export default function Home() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
                   <p className="text-sm text-slate-600">
-                    <span className="font-medium text-slate-800">Continuous probing</span>{" "}
+                    <span className="font-medium text-slate-800">
+                      Continuous probing
+                    </span>{" "}
                     from multiple regions verifies availability and response
                     latency.
                   </p>
@@ -459,7 +632,9 @@ export default function Home() {
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
                   <p className="text-sm text-slate-600">
-                    <span className="font-medium text-slate-800">Automatic removal</span>{" "}
+                    <span className="font-medium text-slate-800">
+                      Automatic removal
+                    </span>{" "}
                     of unreachable servers from the routing pool, with instant
                     failover.
                   </p>
@@ -467,7 +642,9 @@ export default function Home() {
                 <li className="flex items-start gap-3">
                   <CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
                   <p className="text-sm text-slate-600">
-                    <span className="font-medium text-slate-800">Degraded states</span>{" "}
+                    <span className="font-medium text-slate-800">
+                      Degraded states
+                    </span>{" "}
                     are flagged before they become outages.
                   </p>
                 </li>
@@ -487,8 +664,8 @@ export default function Home() {
                 Why Use It
               </h2>
               <p className="mt-4 text-lg text-slate-600">
-                Purpose-built for production DNS environments that can&apos;t afford
-                downtime.
+                Purpose-built for production DNS environments that can&apos;t
+                afford downtime.
               </p>
             </div>
             <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -514,7 +691,11 @@ export default function Home() {
 
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-600 to-teal-700" />
-          <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-10" viewBox="0 0 800 400" fill="none">
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-10"
+            viewBox="0 0 800 400"
+            fill="none"
+          >
             <g stroke="#ffffff" strokeWidth="1">
               <path d="M0 120 Q200 40 400 120 T800 120" />
               <path d="M0 240 Q200 160 400 240 T800 240" />
@@ -555,13 +736,22 @@ export default function Home() {
             Self-hosted &amp; managed authoritative DNS routing infrastructure.
           </p>
           <nav className="flex items-center gap-6 text-sm text-slate-500">
-            <a href="#features" className="transition-colors hover:text-slate-900">
+            <a
+              href="#features"
+              className="transition-colors hover:text-slate-900"
+            >
               Features
             </a>
-            <a href="#how-it-works" className="transition-colors hover:text-slate-900">
+            <a
+              href="#how-it-works"
+              className="transition-colors hover:text-slate-900"
+            >
               How It Works
             </a>
-            <a href="#monitoring" className="transition-colors hover:text-slate-900">
+            <a
+              href="#monitoring"
+              className="transition-colors hover:text-slate-900"
+            >
               Documentation
             </a>
           </nav>
