@@ -3,8 +3,7 @@
 import { headers } from "next/headers";
 import prisma from "@/db";
 import { auth } from "@/lib/auth";
-import { Prisma } from "@/generated/prisma/client";
-import { SiteStatus } from "@/generated/prisma/client";
+import { Prisma, SiteStatus, DnsRecordType } from "@/generated/prisma/client";
 
 const BACKEND_URL = "http://localhost:8000";
 
@@ -129,4 +128,96 @@ export async function deleteSite(siteId: string): Promise<ActionResult> {
   }
   await prisma.site.delete({ where: { id: siteId } });
   return { ok: true };
+}
+
+export type DnsRecordRow = {
+  id: string;
+  siteId: string;
+  type: "A" | "AAAA" | "CNAME";
+  name: string;
+  value: string;
+  ttl: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type DnsRecordActionResult =
+  | { ok: true; record: DnsRecordRow }
+  | { ok: false; error: string };
+
+async function getSiteOwnership(siteId: string) {
+  const session = await getSessionUser();
+  if (!session) return { session: null, site: null };
+  const site = await prisma.site.findUnique({ where: { id: siteId } });
+  if (!site || site.userId !== session.user.id) return { session, site: null };
+  return { session, site };
+}
+
+export async function addDnsRecord(
+  siteId: string,
+  data: { type: "A" | "AAAA" | "CNAME"; name: string; value: string; ttl?: number },
+): Promise<DnsRecordActionResult> {
+  const { session, site } = await getSiteOwnership(siteId);
+  if (!session) return { ok: false, error: "You must be signed in." };
+  if (!site) return { ok: false, error: "Site not found." };
+  if (site.status !== "VERIFIED")
+    return { ok: false, error: "Site must be verified to manage DNS records." };
+
+  try {
+    const record = await prisma.dnsRecord.create({
+      data: {
+        siteId,
+        type: data.type as unknown as DnsRecordType,
+        name: data.name.trim(),
+        value: data.value.trim(),
+        ttl: data.ttl ?? 300,
+      },
+    });
+    return { ok: true, record: record as unknown as DnsRecordRow };
+  } catch {
+    return { ok: false, error: "Failed to create DNS record." };
+  }
+}
+
+export async function updateDnsRecord(
+  recordId: string,
+  siteId: string,
+  data: { type: "A" | "AAAA" | "CNAME"; name: string; value: string; ttl?: number },
+): Promise<DnsRecordActionResult> {
+  const { session, site } = await getSiteOwnership(siteId);
+  if (!session) return { ok: false, error: "You must be signed in." };
+  if (!site) return { ok: false, error: "Site not found." };
+  if (site.status !== "VERIFIED")
+    return { ok: false, error: "Site must be verified to manage DNS records." };
+
+  try {
+    const record = await prisma.dnsRecord.update({
+      where: { id: recordId },
+      data: {
+        type: data.type as unknown as DnsRecordType,
+        name: data.name.trim(),
+        value: data.value.trim(),
+        ttl: data.ttl ?? 300,
+      },
+    });
+    return { ok: true, record: record as unknown as DnsRecordRow };
+  } catch {
+    return { ok: false, error: "Failed to update DNS record." };
+  }
+}
+
+export async function deleteDnsRecord(
+  recordId: string,
+  siteId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const { session, site } = await getSiteOwnership(siteId);
+  if (!session) return { ok: false, error: "You must be signed in." };
+  if (!site) return { ok: false, error: "Site not found." };
+
+  try {
+    await prisma.dnsRecord.delete({ where: { id: recordId } });
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "Failed to delete DNS record." };
+  }
 }

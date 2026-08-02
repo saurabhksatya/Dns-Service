@@ -20,7 +20,7 @@ cd backend && go run .                # starts HTTP :8000 + DNS :8001
 cd frontend && pnpm install && pnpm prisma generate && pnpm dev
 ```
 
-Backend must be running for the dashboard's Verify button (frontend calls `http://localhost:8000/checkNS/:domain` via server actions in `src/app/user/dashboard/actions.ts`).
+Backend must be running for the dashboard's Verify button (frontend calls `http://localhost:8000/test/:domain` with a trailing dot via server actions in `src/app/user/dashboard/actions.ts`; the real `checkNS` path is commented out).
 
 ## Backend (Go) gotchas
 
@@ -35,6 +35,7 @@ Backend must be running for the dashboard's Verify button (frontend calls `http:
 - Path alias `@/*` → `./src/*`. Never use `../../` imports.
 - Every form uses **react-hook-form + zod** (see `src/app/(auth)/signin/page.tsx` for the pattern).
 - `authClient` (better-auth) is client-only (`"use client"`). There is **no middleware** — guard server pages by calling `auth.api.getSession({ headers: await headers() })` and `redirect("/signin")` (see `src/app/user/dashboard/page.tsx`).
+- DNS record management is **DB-only via Next.js server actions** (no backend calls): `addDnsRecord`/`updateDnsRecord`/`deleteDnsRecord` in `src/app/user/dashboard/actions.ts`. All verify session + site ownership and require the site to be `VERIFIED` (the config page `src/app/user/sites/[siteId]/` only shows for verified sites). Edit/delete run client-side in `dns-records-client.tsx` and re-fetch server records on `router.refresh()`.
 - `src/generated/prisma/` is **gitignored** — always `pnpm prisma generate` after pulling or editing the schema.
 - Backend HTTP routes are unauthenticated; auth is entirely the frontend's job.
 
@@ -42,7 +43,7 @@ Backend must be running for the dashboard's Verify button (frontend calls `http:
 
 - Schema: `frontend/prisma/schema.prisma`; `prisma.config.ts` loads `DATABASE_URL` from `frontend/.env` via dotenv. Client generator `prisma-client` outputs TS to `src/generated/prisma`.
 - After editing schema: `pnpm prisma generate` then `pnpm prisma migrate dev --name <name>` (applies + creates SQL). Fresh DB: `pnpm prisma migrate deploy`.
-- `Site` model + `SiteStatus` enum (`PENDING`/`VERIFIED`/`FAILED`) already exist; `id`/timestamps have defaults. Table names use lowercase `@@map("...")`; timestamps are `@db.Timestamptz(3)`.
+- `Site` model + `SiteStatus` enum (`PENDING`/`VERIFIED`/`FAILED`) and `DnsRecord` model + `DnsRecordType` enum (`A`/`AAAA`/`CNAME`) already exist; `id`/timestamps have defaults. `Site` has a `dnsRecords` relation (`DnsRecord.siteId` → `Site.id`, cascade delete). Table names use lowercase `@@map("...")`; timestamps are `@db.Timestamptz(3)`.
 
 ## Verification commands
 
@@ -50,4 +51,4 @@ Frontend: `npx tsc --noEmit` → `pnpm lint` → `pnpm build` (from `frontend/`)
 
 ## Stale-doc caveat
 
-`.agents/overview.md` and `database.md` still claim the site-management UI doesn't exist — it does now (`src/app/user/dashboard/`). Trust the code over the docs.
+`.agents/overview.md` and `database.md` still claim the site-management UI doesn't exist — it does now (`src/app/user/dashboard/`), and the DNS-record config page lives at `src/app/user/sites/[siteId]/`. Trust the code over the docs.

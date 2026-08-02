@@ -119,31 +119,13 @@ func checkNameServers(c *echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 
-func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
-	msg := new(dns.Msg)
-	msg.SetReply(r)
-	msg.Authoritative = true
-
-	for _, q := range r.Question {
-		switch q.Qtype {
-		case dns.TypeA:
-			rr := &dns.A{
-				Hdr: dns.RR_Header{
-					Name:   q.Name,
-					Rrtype: dns.TypeA,
-					Class:  dns.ClassINET,
-					Ttl:    300,
-				},
-				A: net.ParseIP("102.100.1.1 "),
-			}
-			msg.Answer = append(msg.Answer, rr)
-		}
-	}
-
-	w.WriteMsg(msg)
-}
-
 func main() {
+	if err := initDB(); err != nil {
+		slog.Error("Failed to connect to database", "error", err)
+		return
+	}
+	slog.Info("Connected to database")
+
 	e := echo.New()
 
 	//e.Use(middleware.RequestLogger())

@@ -81,9 +81,30 @@ model Site {
   failReason  String?
   createdAt   DateTime   @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+  dnsRecords  DnsRecord[]
 
   @@unique([userId, domain])
   @@map("site")
+}
+
+model DnsRecord {
+  id        String       @id @default(cuid())
+  site      Site         @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  siteId    String
+  type      DnsRecordType
+  name      String
+  value     String
+  ttl       Int          @default(300)
+  createdAt DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime     @updatedAt @db.Timestamptz(3)
+
+  @@map("dns_record")
+}
+
+enum DnsRecordType {
+  A
+  AAAA
+  CNAME
 }
 
 enum SiteStatus {
