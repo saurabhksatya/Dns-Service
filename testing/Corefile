@@ -1,0 +1,17 @@
+example1.com:53 {
+    template IN NS . {
+        match ".*\.?example1\.com\."
+        answer "{{ .Name }} 300 IN NS ns1.example.com."
+        answer "{{ .Name }} 300 IN NS ns2.example.com."
+    }
+
+    log
+    errors
+}
+
+.:53 {
+    forward . 1.1.1.1
+
+    log
+    errors
+}

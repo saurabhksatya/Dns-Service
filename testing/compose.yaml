@@ -1,0 +1,11 @@
+services:
+  CoreDns: 
+    image: coredns/coredns:latest
+    container_name: coredns
+    restart: unless-stopped
+    ports:
+      - "4000:53/udp"
+      # - "5354:53/tcp"
+    volumes:
+      - ./Corefile:/etc/coredns/Corefile:ro
+    command: -conf /etc/coredns/Corefile
