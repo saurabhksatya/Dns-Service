@@ -176,7 +176,7 @@ export default function DnsRecordsClient({
       <header className="border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
               <Globe2 className="h-5 w-5" />
             </span>
             <span className="text-lg font-bold tracking-tight">
@@ -195,7 +195,9 @@ export default function DnsRecordsClient({
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold tracking-tight">DNS Configuration</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            DNS Configuration
+          </h1>
           <p className="flex items-center gap-1.5 text-sm text-slate-600">
             <span className="font-mono font-medium text-slate-900">
               {site.domain}

@@ -84,9 +84,18 @@ function StatusBadge({ status }: { status: SiteRow["status"] }) {
   );
 }
 
-function formatDate(date: Date | null) {
+function formatDate(date: Date | string | null) {
   if (!date) return "Never";
-  return date.toLocaleString();
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 }
 
 export default function SitesClient({ sites }: { sites: SiteRow[] }) {
@@ -128,7 +137,10 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
     }
     setVerifyMessage({
       id: site.id,
-      text: result.status === "VERIFIED" ? "Verification successful." : (result.error ?? "Verification failed."),
+      text:
+        result.status === "VERIFIED"
+          ? "Verification successful."
+          : (result.error ?? "Verification failed."),
       kind: result.status === "VERIFIED" ? "success" : "error",
     });
     router.refresh();
@@ -152,7 +164,7 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
       <header className="border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
               <Globe2 className="h-5 w-5" />
             </span>
             <span className="text-lg font-bold tracking-tight">
@@ -281,29 +293,36 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
                       <Button
                         variant="secondary"
                         size="sm"
+                        nativeButton={false}
                         render={<Link href={`/user/sites/${site.id}`} />}
                       >
                         Configure
                       </Button>
                     )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onVerify(site)}
-                      disabled={verifyingId === site.id || deletingId === site.id}
-                    >
-                      {verifyingId === site.id ? (
-                        <Loader2 className="animate-spin" />
-                      ) : (
-                        <RefreshCw />
-                      )}
-                      Verify
-                    </Button>
+                    {site.status !== "VERIFIED" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onVerify(site)}
+                        disabled={
+                          verifyingId === site.id || deletingId === site.id
+                        }
+                      >
+                        {verifyingId === site.id ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          <RefreshCw />
+                        )}
+                        Verify
+                      </Button>
+                    )}
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => onDelete(site)}
-                      disabled={deletingId === site.id || verifyingId === site.id}
+                      disabled={
+                        deletingId === site.id || verifyingId === site.id
+                      }
                     >
                       {deletingId === site.id ? (
                         <Loader2 className="animate-spin" />

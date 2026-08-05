@@ -401,11 +401,11 @@ function DashboardCard() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-emerald-50/40 text-slate-900">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 via-white to-emerald-50/40 text-slate-900">
       <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <a href="#" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
               <Globe2 className="h-5 w-5" />
             </span>
             <span className="text-lg font-bold tracking-tight">
@@ -479,7 +479,7 @@ export default function Home() {
               </span>
               <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight md:text-5xl">
                 Intelligent DNS Routing for{" "}
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
                   Highly Available
                 </span>{" "}
                 Infrastructure
@@ -508,7 +508,7 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-emerald-100/70 to-teal-100/50 blur-xl" />
+              <div className="absolute -inset-4 -z-10 rounded-3xl bg-linear-to-br from-emerald-100/70 to-teal-100/50 blur-xl" />
               <div
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white/80 shadow-xl shadow-emerald-900/5 backdrop-blur-sm w-full max-w-[520px] mx-auto"
                 style={{ aspectRatio: "520 / 460" }}
@@ -651,7 +651,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="relative">
-              <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-emerald-100/60 to-teal-100/40 blur-xl" />
+              <div className="absolute -inset-4 -z-10 rounded-3xl bg-linear-to-br from-emerald-100/60 to-teal-100/40 blur-xl" />
               <DashboardCard />
             </div>
           </div>
@@ -674,7 +674,7 @@ export default function Home() {
                   key={benefit.title}
                   className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-8 text-center transition-all hover:-translate-y-1 hover:border-emerald-300 hover:bg-white hover:shadow-lg hover:shadow-emerald-900/5"
                 >
-                  <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-600/25">
+                  <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-600/25">
                     <benefit.icon className="h-6 w-6" />
                   </span>
                   <h3 className="mt-5 text-lg font-semibold">
@@ -690,7 +690,7 @@ export default function Home() {
         </section>
 
         <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-600 to-teal-700" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-br from-emerald-600 to-teal-700" />
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full opacity-10"
             viewBox="0 0 800 400"
@@ -727,7 +727,7 @@ export default function Home() {
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 text-white">
               <Globe2 className="h-4 w-4" />
             </span>
             <span className="text-sm font-bold">RouteDNS</span>
