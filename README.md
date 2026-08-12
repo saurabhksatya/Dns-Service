@@ -1,4 +1,4 @@
-# DNS Distributed
+# DNS Service
 
 A polyglot DNS-hosting platform with a Next.js frontend and Go-based DNS server/backend. Two loosely-coupled services sharing only a PostgreSQL database — no monorepo tooling.
 
@@ -165,3 +165,56 @@ Backend uses the same `DATABASE_URL` (via shared compose network).
 ## License
 
 MIT
+
+## Scaling to a Distributed System
+
+DNS Service is designed to scale horizontally into a distributed DNS infrastructure:
+
+### Database Replication
+- Configure PostgreSQL with **streaming replication** (primary + read replicas)
+- Frontend (Next.js) connects to the primary for writes; reads can route to replicas
+- Backend (Go) DNS servers connect to replicas for low-latency read-heavy DNS resolution
+- Use a connection pooler (PgBouncer) in front of replicas for connection efficiency
+
+### Horizontal Backend Scaling
+- Deploy **multiple Go backend instances** behind a load balancer (e.g., NGINX, HAProxy, or cloud LB)
+- Each backend instance runs both:
+  - HTTP API on port 8000 (for verification, health checks)
+  - Authoritative DNS server on port 8001 (UDP/TCP)
+- All instances share the same replicated PostgreSQL cluster
+- DNS queries distribute across instances via round-robin or anycast
+
+### Distributed Architecture Diagram
+```
+                    ┌─────────────────┐
+                    │  Load Balancer  │
+                    │  (Anycast DNS)  │
+                    └────────┬────────┘
+                             │
+          ┌──────────────────┼──────────────────┐
+          ▼                  ▼                  ▼
+    ┌───────────┐      ┌───────────┐      ┌───────────┐
+    │ Backend 1 │      │ Backend 2 │      │ Backend N │
+    │ :8000/:8001│      │ :8000/:8001│      │ :8000/:8001│
+    └─────┬─────┘      └─────┬─────┘      └─────┬─────┘
+          │                  │                  │
+          └──────────────────┼──────────────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │  PostgreSQL     │
+                    │  Primary        │
+                    │  (writes)       │
+                    └────────┬────────┘
+                             │
+                    ┌────────┴────────┐
+                    │  Read Replicas  │
+                    │  (DNS reads)    │
+                    └─────────────────┘
+```
+
+### Deployment Considerations
+- **DNS synchronization**: Since all backends read from the same DB, DNS records are instantly consistent across instances
+- **Health checks**: Use `/health` endpoint on HTTP port 8000 for LB health checks
+- **Zone transfers**: Not needed — all instances serve from the same source of truth
+- **Frontend**: Runs separately (single instance or scaled behind its own LB), connects only to primary for mutations
+- **SSL/TLS**: Terminate at load balancer; backend communicates over private network
