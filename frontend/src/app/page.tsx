@@ -85,20 +85,6 @@ export default function Home() {
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-5 text-xs text-muted-foreground">
-              <a href="#features" className="transition-colors hover:text-foreground">
-                Features
-              </a>
-              <a href="#architecture" className="transition-colors hover:text-foreground">
-                Architecture
-              </a>
-              <a href="#records" className="transition-colors hover:text-foreground">
-                DNS Engine
-              </a>
-              <a href="#quickstart" className="transition-colors hover:text-foreground">
-                Quickstart
-              </a>
-            </nav>
           </div>
 
           <div className="flex items-center gap-3">
