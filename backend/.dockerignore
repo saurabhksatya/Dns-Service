@@ -1,0 +1,9 @@
+.git
+.gitignore
+.idea
+tmp
+*.exe
+*.test
+*.out
+.env
+.env.*

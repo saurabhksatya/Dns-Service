@@ -5,7 +5,7 @@ import prisma from "@/db";
 import { auth } from "@/lib/auth";
 import { Prisma, SiteStatus, DnsRecordType } from "@/generated/prisma/client";
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 type VerifyResult =
