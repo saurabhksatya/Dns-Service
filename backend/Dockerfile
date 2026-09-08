@@ -21,9 +21,6 @@ FROM alpine:latest
 
 WORKDIR /app
 
-# Install root certs and tzdata for TLS/time support
-RUN apk --no-cache add ca-certificates tzdata \
-    && addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY --from=builder /bin/dns-server /app/dns-server
 
