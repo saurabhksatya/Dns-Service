@@ -99,7 +99,6 @@ export async function verifySite(siteId: string): Promise<VerifyResult> {
     message =
       "Could not reach the verification backend. Please try again later.";
   }
-  const status: "VERIFIED" | "FAILED" = success ? "VERIFIED" : "FAILED";
   await prisma.site.update({
     where: { id: siteId },
     data: {
@@ -155,7 +154,12 @@ async function getSiteOwnership(siteId: string) {
 
 export async function addDnsRecord(
   siteId: string,
-  data: { type: "A" | "AAAA" | "CNAME"; name: string; value: string; ttl?: number },
+  data: {
+    type: "A" | "AAAA" | "CNAME";
+    name: string;
+    value: string;
+    ttl?: number;
+  },
 ): Promise<DnsRecordActionResult> {
   const { session, site } = await getSiteOwnership(siteId);
   if (!session) return { ok: false, error: "You must be signed in." };
@@ -182,7 +186,12 @@ export async function addDnsRecord(
 export async function updateDnsRecord(
   recordId: string,
   siteId: string,
-  data: { type: "A" | "AAAA" | "CNAME"; name: string; value: string; ttl?: number },
+  data: {
+    type: "A" | "AAAA" | "CNAME";
+    name: string;
+    value: string;
+    ttl?: number;
+  },
 ): Promise<DnsRecordActionResult> {
   const { session, site } = await getSiteOwnership(siteId);
   if (!session) return { ok: false, error: "You must be signed in." };
