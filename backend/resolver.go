@@ -20,6 +20,7 @@ var authoritativeNS = []string{"ns1.mdp.dpdns.org.", "ns2.mdp.dpdns.org."}
 type dbResult struct {
 	authoritative bool
 	rrs           []dns.RR
+	err           error
 }
 
 func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
@@ -38,6 +39,12 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 
 	for _, q := range r.Question {
 		res := lookupFromDB(ctx, q.Name, q.Qtype)
+		if res.err != nil {
+			slog.Error("failed to resolve DNS query", "name", q.Name, "error", res.err)
+			msg.Rcode = dns.RcodeServerFailure
+			w.WriteMsg(msg)
+			return
+		}
 		if !res.authoritative {
 			// Not a zone we host — forward to upstream.
 			upstream := forwardUpstream(r)
@@ -65,10 +72,10 @@ func lookupFromDB(ctx context.Context, qname string, qtype uint16) dbResult {
 
 	for i := 0; i < len(labels); i++ {
 		domain := strings.Join(labels[i:], ".")
-		site, err := lookupVerifiedSite(ctx, domain)
+		site, err := lookupSite(ctx, domain)
 		if err != nil {
 			slog.Error("failed to look up site", "domain", domain, "error", err)
-			return dbResult{}
+			return dbResult{err: err}
 		}
 		if site == nil {
 			continue
@@ -148,6 +155,10 @@ func resolveTarget(ctx context.Context, target string, qtype uint16) []dns.RR {
 	res := lookupFromDB(ctx, target, qtype)
 	if res.authoritative {
 		return res.rrs
+	}
+	if res.err != nil {
+		slog.Error("failed to resolve CNAME target", "target", target, "error", res.err)
+		return nil
 	}
 	return forwardQuery(target, qtype)
 }

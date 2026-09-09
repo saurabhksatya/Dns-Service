@@ -41,10 +41,10 @@ type DnsRecord struct {
 	TTL   int
 }
 
-func lookupVerifiedSite(ctx context.Context, domain string) (*Site, error) {
+func lookupSite(ctx context.Context, domain string) (*Site, error) {
 	var s Site
 	err := pool.QueryRow(ctx,
-		`SELECT id, domain FROM site WHERE lower(domain) = lower($1) AND status = 'VERIFIED'`,
+		`SELECT id, domain FROM site WHERE lower(domain) = lower($1) LIMIT 1`,
 		domain,
 	).Scan(&s.ID, &s.Domain)
 	if err != nil {
