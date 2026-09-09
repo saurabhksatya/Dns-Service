@@ -90,8 +90,8 @@ func checkNameServers(c *echo.Context) error {
 	}
 
 	myNS := map[string]bool{
-		"ns1.example.com": false,
-		"ns2.example.com": false,
+		"ns1.mdp.dpdns.org.": false,
+		"ns2.mdp.dpdns.org.": false,
 	}
 
 	for _, ns := range nsRecords {
