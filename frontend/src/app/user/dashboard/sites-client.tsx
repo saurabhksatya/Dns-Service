@@ -67,19 +67,22 @@ const statusConfig: Record<
     label: "Verified & Active",
     badge: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     dot: "bg-emerald-500",
-    description: "Nameservers successfully delegated and ready to resolve records.",
+    description:
+      "Nameservers successfully delegated and ready to resolve records.",
   },
   PENDING: {
     label: "Delegation Pending",
     badge: "bg-amber-500/10 text-amber-500 border-amber-500/20",
     dot: "bg-amber-500 animate-pulse",
-    description: "Waiting for NS delegation to ns1.example.com / ns2.example.com.",
+    description:
+      "Waiting for NS delegation to ns1.mdp.dpdns.org / ns2.mdp.dpdns.org",
   },
   FAILED: {
     label: "Check Failed",
     badge: "bg-red-500/10 text-red-400 border-red-500/20",
     dot: "bg-red-500",
-    description: "Could not verify nameserver delegation. Check your registrar settings.",
+    description:
+      "Could not verify nameserver delegation. Check your registrar settings.",
   },
 };
 
@@ -115,7 +118,9 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "VERIFIED" | "PENDING" | "FAILED">("ALL");
+  const [statusFilter, setStatusFilter] = useState<
+    "ALL" | "VERIFIED" | "PENDING" | "FAILED"
+  >("ALL");
   const [copiedNs, setCopiedNs] = useState(false);
   const [verifyMessage, setVerifyMessage] = useState<{
     id: string;
@@ -141,14 +146,25 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
 
   const filteredSites = useMemo(() => {
     return sites.filter((site) => {
-      const matchesSearch = site.domain.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === "ALL" || site.status === statusFilter;
+      const matchesSearch = site.domain
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesStatus =
+        statusFilter === "ALL" || site.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [sites, searchQuery, statusFilter]);
 
-  const verifiedCount = useMemo(() => sites.filter((s) => s.status === "VERIFIED").length, [sites]);
-  const pendingCount = useMemo(() => sites.filter((s) => s.status === "PENDING" || s.status === "FAILED").length, [sites]);
+  const verifiedCount = useMemo(
+    () => sites.filter((s) => s.status === "VERIFIED").length,
+    [sites],
+  );
+  const pendingCount = useMemo(
+    () =>
+      sites.filter((s) => s.status === "PENDING" || s.status === "FAILED")
+        .length,
+    [sites],
+  );
 
   const onSubmit = async (values: AddSiteFormValues) => {
     setActionError(null);
@@ -202,7 +218,7 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
   };
 
   const copyNameservers = () => {
-    navigator.clipboard.writeText("ns1.example.com\nns2.example.com");
+    navigator.clipboard.writeText("ns1.mdp.dpdns.org\nns2.mdp.dpdns.org");
     setCopiedNs(true);
     setTimeout(() => setCopiedNs(false), 2000);
   };
@@ -218,7 +234,8 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
                 <Globe2 className="h-4 w-4" />
               </span>
               <span className="text-base font-semibold tracking-tight">
-                Route<span className="text-muted-foreground font-normal">DNS</span>
+                Route
+                <span className="text-muted-foreground font-normal">DNS</span>
               </span>
             </Link>
             <span className="text-xs text-muted-foreground hidden sm:inline-block border-l border-border/60 pl-4">
@@ -258,19 +275,25 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
               <div className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider">
                 Total Domains
               </div>
-              <div className="text-lg font-bold text-foreground font-mono">{sites.length}</div>
+              <div className="text-lg font-bold text-foreground font-mono">
+                {sites.length}
+              </div>
             </div>
             <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3.5 py-2">
               <div className="text-[10px] uppercase font-semibold text-emerald-500 tracking-wider">
                 Verified
               </div>
-              <div className="text-lg font-bold text-emerald-500 font-mono">{verifiedCount}</div>
+              <div className="text-lg font-bold text-emerald-500 font-mono">
+                {verifiedCount}
+              </div>
             </div>
             <div className="rounded-lg border border-border/80 bg-card px-3.5 py-2">
               <div className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider">
                 Pending
               </div>
-              <div className="text-lg font-bold text-muted-foreground font-mono">{pendingCount}</div>
+              <div className="text-lg font-bold text-muted-foreground font-mono">
+                {pendingCount}
+              </div>
             </div>
           </div>
         </div>
@@ -280,8 +303,12 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
           <div className="flex items-center gap-2.5">
             <Server className="h-4 w-4 text-foreground shrink-0" />
             <div>
-              <span className="font-semibold text-foreground">Authoritative Nameservers:</span>
-              <span className="ml-2 font-mono text-muted-foreground">ns1.example.com &bull; ns2.example.com</span>
+              <span className="font-semibold text-foreground">
+                Authoritative Nameservers:
+              </span>
+              <span className="ml-2 font-mono text-muted-foreground">
+                ns1.mdp.dpdns.org &bull; ns2.mdp.dpdns.org
+              </span>
             </div>
           </div>
           <Button
@@ -290,7 +317,11 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
             onClick={copyNameservers}
             className="gap-1 text-xs shrink-0"
           >
-            {copiedNs ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+            {copiedNs ? (
+              <Check className="h-3 w-3 text-emerald-500" />
+            ) : (
+              <Copy className="h-3 w-3" />
+            )}
             {copiedNs ? "Copied" : "Copy Nameservers"}
           </Button>
         </div>
@@ -302,7 +333,9 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
               <Plus className="h-4 w-4" /> Register New Domain
             </CardTitle>
             <CardDescription className="text-xs">
-              Enter your domain name (e.g. <code className="font-mono text-foreground">example.com</code>) to manage its authoritative records.
+              Enter your domain name (e.g.{" "}
+              <code className="font-mono text-foreground">example.com</code>) to
+              manage its authoritative records.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -377,7 +410,9 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {st === "ALL" ? "All" : st.charAt(0) + st.slice(1).toLowerCase()}
+                {st === "ALL"
+                  ? "All"
+                  : st.charAt(0) + st.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
@@ -389,7 +424,9 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
             <div className="rounded-xl border border-dashed border-border/80 p-12 text-center bg-card/30">
               <Globe2 className="mx-auto h-8 w-8 text-muted-foreground opacity-40 mb-3" />
               <p className="text-sm font-medium text-foreground">
-                {searchQuery ? "No domains matched your search" : "No domains registered yet"}
+                {searchQuery
+                  ? "No domains matched your search"
+                  : "No domains registered yet"}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 {searchQuery
@@ -504,7 +541,8 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
           onClick={(e) => {
-            if (e.target === e.currentTarget && !isDeleting) setSiteToDelete(null);
+            if (e.target === e.currentTarget && !isDeleting)
+              setSiteToDelete(null);
           }}
         >
           <div className="w-full max-w-md rounded-xl border border-border/80 bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150 space-y-4">
@@ -517,7 +555,12 @@ export default function SitesClient({ sites }: { sites: SiteRow[] }) {
                   Delete Domain
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Are you sure you want to delete <span className="font-mono font-semibold text-foreground">{siteToDelete.domain}</span>? All configured DNS records for this domain will be permanently deleted. This action cannot be undone.
+                  Are you sure you want to delete{" "}
+                  <span className="font-mono font-semibold text-foreground">
+                    {siteToDelete.domain}
+                  </span>
+                  ? All configured DNS records for this domain will be
+                  permanently deleted. This action cannot be undone.
                 </p>
               </div>
               <button

@@ -15,7 +15,7 @@ const (
 	defaultTTL   = 300
 )
 
-var authoritativeNS = []string{"ns1.example.com.", "ns2.example.com."}
+var authoritativeNS = []string{"ns1.mdp.dpdns.org.", "ns2.mdp.dpdns.org."}
 
 type dbResult struct {
 	authoritative bool
