@@ -73,7 +73,6 @@ func checkNameServerFromDockerCoreDNS(c *echo.Context) error {
 
 func checkNameServers(c *echo.Context) error {
 	domain := c.Param("domain")
-	println(domain)
 	if err := utils.IsValidDomain(domain); err {
 		e := &types.ErrorResponse{
 			Message: "Invalid Domain",
@@ -95,10 +94,10 @@ func checkNameServers(c *echo.Context) error {
 	}
 
 	for _, ns := range nsRecords {
-		name := strings.ToLower(ns.Host)
-		if !myNS[name] {
+		name := strings.ToLower(dns.Fqdn(ns.Host))
+		if _, ok := myNS[name]; !ok {
 			e := &types.ErrorResponse{
-				Message: "Remove " + strings.ToLower(ns.Host) + " from your NS records",
+				Message: "Remove " + name + " from your NS records",
 			}
 			return c.JSON(http.StatusBadRequest, e)
 		} else {
@@ -115,8 +114,8 @@ func checkNameServers(c *echo.Context) error {
 		}
 	}
 
-	resp := &types.CheckNameServerResponse{Success: true}
-	return c.JSON(http.StatusOK, resp)
+	final_resp := &types.CheckNameServerResponse{Success: true}
+	return c.JSON(http.StatusOK, final_resp)
 }
 
 func main() {
