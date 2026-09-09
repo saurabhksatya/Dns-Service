@@ -1,21 +1,31 @@
 services:
-    db:
-        image: postgres:18
-        container_name: db
-        restart: unless-stopped
-        environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: app
+    # db:
+    #     image: postgres:18
+    #     container_name: db
+    #     restart: unless-stopped
+    #     environment:
+    #         POSTGRES_USER: postgres
+    #         POSTGRES_PASSWORD: postgres
+    #         POSTGRES_DB: app
+    #     ports:
+    #         - "5432:5432"
+    #     volumes:
+    #         - db_data:/var/lib/postgresql
+    #     healthcheck:
+    #         test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+    #         interval: 10s
+    #         timeout: 5s
+    #         retries: 5
+
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile.backend
+        env_file:
+            - .env
         ports:
-            - "5432:5432"
-        volumes:
-            - db_data:/var/lib/postgresql
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
-    
+            - "8000:8000"
+            - "8001:8001/udp"
+            - "8001:8001/tcp"
 volumes:
     db_data:
