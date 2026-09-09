@@ -18,7 +18,7 @@ WORKDIR /src
 # the container.
 COPY ./backend/go.mod ./
 COPY ./backend/go.sum ./
-RUN --mount=type=cache,id=s/862ce20e-489b-47e5-9944-7578abefc98b-backend-go-pkg-mod,target=/go/pkg/mod \
+RUN --mount=type=cache,id=s/a66f8cc2-7fc3-434a-a897-621e272d8cf0-backend-go-pkg-mod,target=/go/pkg/mod \
     go mod download -x
 
 # This is the architecture you're building for, which is passed in by the builder.
@@ -30,7 +30,7 @@ ARG TARGETARCH
 # Leverage a bind mount to the current directory to avoid having to copy the
 # source code into the container.
 COPY ./backend .
-RUN --mount=type=cache,id=s/862ce20e-489b-47e5-9944-7578abefc98b-backend-go-pkg-mod,target=/go/pkg/mod \
+RUN --mount=type=cache,id=s/a66f8cc2-7fc3-434a-a897-621e272d8cf0-backend-go-pkg-mod,target=/go/pkg/mod \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server .
 
 ################################################################################
@@ -48,7 +48,7 @@ FROM alpine:latest AS final
 
 # Install any runtime dependencies that are needed to run your application.
 # Leverage a cache mount to /var/cache/apk/ to speed up subsequent builds.
-RUN --mount=type=cache,id=s/862ce20e-489b-47e5-9944-7578abefc98b-backend-var-cache-apk,target=/var/cache/apk \
+RUN --mount=type=cache,id=s/a66f8cc2-7fc3-434a-a897-621e272d8cf0-backend-var-cache-apk,target=/var/cache/apk \
     apk --update add \
     ca-certificates \
     tzdata \
