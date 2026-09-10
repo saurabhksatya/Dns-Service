@@ -66,7 +66,10 @@ const recordSchema = z.object({
 
 type RecordFormValues = z.infer<typeof recordSchema>;
 
-const typeDescriptions: Record<RecordFormValues["type"], { help: string; placeholder: string; example: string }> = {
+const typeDescriptions: Record<
+  RecordFormValues["type"],
+  { help: string; placeholder: string; example: string }
+> = {
   A: {
     help: "Maps a hostname to an IPv4 address",
     placeholder: "192.0.2.1",
@@ -120,14 +123,18 @@ export default function DnsRecordsClient({
 }) {
   const router = useRouter();
   const [editingRecord, setEditingRecord] = useState<DnsRecordRow | null>(null);
-  const [recordToDelete, setRecordToDelete] = useState<DnsRecordRow | null>(null);
+  const [recordToDelete, setRecordToDelete] = useState<DnsRecordRow | null>(
+    null,
+  );
   const [isDeleting, setIsDeleting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"ALL" | "A" | "AAAA" | "CNAME">("ALL");
+  const [typeFilter, setTypeFilter] = useState<"ALL" | "A" | "AAAA" | "CNAME">(
+    "ALL",
+  );
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Add Form
@@ -142,15 +149,23 @@ export default function DnsRecordsClient({
     defaultValues: { type: "A", name: "@", value: "", ttl: "300" },
   });
 
-  const watchAddType = useWatch({ control: addForm.control, name: "type" }) || "A";
-  const watchAddName = useWatch({ control: addForm.control, name: "name" }) || "@";
-  const watchAddValue = useWatch({ control: addForm.control, name: "value" }) || "";
-  const watchAddTtl = useWatch({ control: addForm.control, name: "ttl" }) || "300";
+  const watchAddType =
+    useWatch({ control: addForm.control, name: "type" }) || "A";
+  const watchAddName =
+    useWatch({ control: addForm.control, name: "name" }) || "@";
+  const watchAddValue =
+    useWatch({ control: addForm.control, name: "value" }) || "";
+  const watchAddTtl =
+    useWatch({ control: addForm.control, name: "ttl" }) || "300";
 
-  const watchEditType = useWatch({ control: editForm.control, name: "type" }) || "A";
-  const watchEditName = useWatch({ control: editForm.control, name: "name" }) || "@";
-  const watchEditValue = useWatch({ control: editForm.control, name: "value" }) || "";
-  const watchEditTtl = useWatch({ control: editForm.control, name: "ttl" }) || "300";
+  const watchEditType =
+    useWatch({ control: editForm.control, name: "type" }) || "A";
+  const watchEditName =
+    useWatch({ control: editForm.control, name: "name" }) || "@";
+  const watchEditValue =
+    useWatch({ control: editForm.control, name: "value" }) || "";
+  const watchEditTtl =
+    useWatch({ control: editForm.control, name: "ttl" }) || "300";
 
   // Escape key handler for modals
   useEffect(() => {
@@ -295,27 +310,44 @@ export default function DnsRecordsClient({
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Authoritative DNS records stored in database and served on port 8001.
+              Authoritative DNS records stored in database and served on port
+              8001.
             </p>
           </div>
 
           {/* Quick Record Stats */}
           <div className="flex items-center gap-2">
             <div className="rounded-lg border border-border/80 bg-card px-3 py-1.5 text-center">
-              <div className="text-[10px] uppercase font-semibold text-muted-foreground">Total</div>
-              <div className="text-sm font-bold font-mono text-foreground">{recordStats.total}</div>
+              <div className="text-[10px] uppercase font-semibold text-muted-foreground">
+                Total
+              </div>
+              <div className="text-sm font-bold font-mono text-foreground">
+                {recordStats.total}
+              </div>
             </div>
             <div className="rounded-lg border border-sky-500/20 bg-sky-500/5 px-3 py-1.5 text-center">
-              <div className="text-[10px] uppercase font-semibold text-sky-400">A</div>
-              <div className="text-sm font-bold font-mono text-sky-400">{recordStats.a}</div>
+              <div className="text-[10px] uppercase font-semibold text-sky-400">
+                A
+              </div>
+              <div className="text-sm font-bold font-mono text-sky-400">
+                {recordStats.a}
+              </div>
             </div>
             <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-3 py-1.5 text-center">
-              <div className="text-[10px] uppercase font-semibold text-indigo-400">AAAA</div>
-              <div className="text-sm font-bold font-mono text-indigo-400">{recordStats.aaaa}</div>
+              <div className="text-[10px] uppercase font-semibold text-indigo-400">
+                AAAA
+              </div>
+              <div className="text-sm font-bold font-mono text-indigo-400">
+                {recordStats.aaaa}
+              </div>
             </div>
             <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-1.5 text-center">
-              <div className="text-[10px] uppercase font-semibold text-amber-400">CNAME</div>
-              <div className="text-sm font-bold font-mono text-amber-400">{recordStats.cname}</div>
+              <div className="text-[10px] uppercase font-semibold text-amber-400">
+                CNAME
+              </div>
+              <div className="text-sm font-bold font-mono text-amber-400">
+                {recordStats.cname}
+              </div>
             </div>
           </div>
         </div>
@@ -345,7 +377,9 @@ export default function DnsRecordsClient({
                       name="type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-medium">Record Type</FormLabel>
+                          <FormLabel className="text-xs font-medium">
+                            Record Type
+                          </FormLabel>
                           <FormControl>
                             <Select
                               value={field.value}
@@ -355,9 +389,15 @@ export default function DnsRecordsClient({
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="A">A (IPv4 Address)</SelectItem>
-                                <SelectItem value="AAAA">AAAA (IPv6 Address)</SelectItem>
-                                <SelectItem value="CNAME">CNAME (Alias Hostname)</SelectItem>
+                                <SelectItem value="A">
+                                  A (IPv4 Address)
+                                </SelectItem>
+                                <SelectItem value="AAAA">
+                                  AAAA (IPv6 Address)
+                                </SelectItem>
+                                <SelectItem value="CNAME">
+                                  CNAME (Alias Hostname)
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -376,7 +416,9 @@ export default function DnsRecordsClient({
                       render={({ field }) => (
                         <FormItem>
                           <div className="flex items-center justify-between">
-                            <FormLabel className="text-xs font-medium">Name / Host</FormLabel>
+                            <FormLabel className="text-xs font-medium">
+                              Name / Host
+                            </FormLabel>
                             <div className="flex items-center gap-1">
                               <button
                                 type="button"
@@ -411,7 +453,10 @@ export default function DnsRecordsClient({
                             />
                           </FormControl>
                           <p className="text-[11px] font-mono text-muted-foreground">
-                            FQDN: <span className="text-foreground">{getFqdn(field.value, site.domain)}</span>
+                            FQDN:{" "}
+                            <span className="text-foreground">
+                              {getFqdn(field.value, site.domain)}
+                            </span>
                           </p>
                           <FormMessage />
                         </FormItem>
@@ -424,10 +469,14 @@ export default function DnsRecordsClient({
                       name="value"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-medium">Value / Target</FormLabel>
+                          <FormLabel className="text-xs font-medium">
+                            Value / Target
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder={typeDescriptions[watchAddType].placeholder}
+                              placeholder={
+                                typeDescriptions[watchAddType].placeholder
+                              }
                               spellCheck={false}
                               autoComplete="off"
                               className="font-mono text-xs bg-background border-border/80"
@@ -435,7 +484,10 @@ export default function DnsRecordsClient({
                             />
                           </FormControl>
                           <p className="text-[11px] text-muted-foreground">
-                            Example: <span className="font-mono text-foreground/80">{typeDescriptions[watchAddType].example}</span>
+                            Example:{" "}
+                            <span className="font-mono text-foreground/80">
+                              {typeDescriptions[watchAddType].example}
+                            </span>
                           </p>
                           <FormMessage />
                         </FormItem>
@@ -449,13 +501,17 @@ export default function DnsRecordsClient({
                       render={({ field }) => (
                         <FormItem>
                           <div className="flex items-center justify-between">
-                            <FormLabel className="text-xs font-medium">TTL (Seconds)</FormLabel>
+                            <FormLabel className="text-xs font-medium">
+                              TTL (Seconds)
+                            </FormLabel>
                             <div className="flex items-center gap-1">
                               {ttlPresets.map((p) => (
                                 <button
                                   key={p.value}
                                   type="button"
-                                  onClick={() => addForm.setValue("ttl", p.value)}
+                                  onClick={() =>
+                                    addForm.setValue("ttl", p.value)
+                                  }
                                   className={`text-[10px] px-1.5 py-0.5 rounded transition-colors ${
                                     field.value === p.value
                                       ? "bg-foreground text-background font-bold"
@@ -486,10 +542,19 @@ export default function DnsRecordsClient({
                         Live DNS Answer Preview
                       </div>
                       <div className="font-mono text-xs text-foreground truncate">
-                        <span className="text-emerald-400">{getFqdn(watchAddName, site.domain)}.</span>{" "}
-                        <span className="text-muted-foreground">{watchAddTtl || 300}</span> IN{" "}
-                        <span className="font-bold text-amber-400">{watchAddType}</span>{" "}
-                        <span className="text-foreground">{watchAddValue || "..."}</span>
+                        <span className="text-emerald-400">
+                          {getFqdn(watchAddName, site.domain)}.
+                        </span>{" "}
+                        <span className="text-muted-foreground">
+                          {watchAddTtl || 300}
+                        </span>{" "}
+                        IN{" "}
+                        <span className="font-bold text-amber-400">
+                          {watchAddType}
+                        </span>{" "}
+                        <span className="text-foreground">
+                          {watchAddValue || "..."}
+                        </span>
                       </div>
                     </div>
 
@@ -528,12 +593,20 @@ export default function DnsRecordsClient({
                 <span>Local DNS Query Helper</span>
               </div>
               <p className="text-muted-foreground text-[11px] leading-relaxed">
-                Test query your local Go authoritative server running on port 8001:
+                Test query your local Go authoritative server running on port
+                8001:
               </p>
               <div className="flex items-center justify-between rounded bg-background p-2 border border-border/60 font-mono text-[11px] text-muted-foreground">
-                <span className="truncate">dig @127.0.0.1 -p 8001 {site.domain} A</span>
+                <span className="truncate">
+                  dig @ns1.mdp.dpdns.org {site.domain} A
+                </span>
                 <button
-                  onClick={() => copyText("dig-helper", `dig @127.0.0.1 -p 8001 ${site.domain} A`)}
+                  onClick={() =>
+                    copyText(
+                      "dig-helper",
+                      `dig @ns1.mdp.dpdns.org ${site.domain} A`,
+                    )
+                  }
                   className="ml-2 text-muted-foreground hover:text-foreground shrink-0 cursor-pointer"
                   title="Copy command"
                 >
@@ -584,7 +657,9 @@ export default function DnsRecordsClient({
                 <div className="p-12 text-center">
                   <Layers className="mx-auto h-8 w-8 text-muted-foreground opacity-30 mb-3" />
                   <p className="text-sm font-medium text-foreground">
-                    {searchQuery ? "No matching records found" : "No DNS records published yet"}
+                    {searchQuery
+                      ? "No matching records found"
+                      : "No DNS records published yet"}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {searchQuery
@@ -619,7 +694,9 @@ export default function DnsRecordsClient({
                               <div className="flex items-center gap-1.5 font-mono text-foreground font-semibold">
                                 <span>{fqdn}</span>
                                 <button
-                                  onClick={() => copyText(`host-${record.id}`, fqdn)}
+                                  onClick={() =>
+                                    copyText(`host-${record.id}`, fqdn)
+                                  }
                                   className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground cursor-pointer"
                                   title="Copy FQDN"
                                 >
@@ -638,9 +715,13 @@ export default function DnsRecordsClient({
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-1.5 font-mono text-muted-foreground group-hover:text-foreground transition-colors">
-                                <span className="truncate max-w-[220px]">{record.value}</span>
+                                <span className="truncate max-w-[220px]">
+                                  {record.value}
+                                </span>
                                 <button
-                                  onClick={() => copyText(`val-${record.id}`, record.value)}
+                                  onClick={() =>
+                                    copyText(`val-${record.id}`, record.value)
+                                  }
                                   className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground cursor-pointer"
                                   title="Copy value"
                                 >
@@ -706,7 +787,9 @@ export default function DnsRecordsClient({
             <div className="flex items-center justify-between pb-3 border-b border-border/60">
               <div className="flex items-center gap-2">
                 <Pencil className="h-4 w-4 text-foreground" />
-                <h2 className="text-base font-bold text-foreground">Edit DNS Record</h2>
+                <h2 className="text-base font-bold text-foreground">
+                  Edit DNS Record
+                </h2>
               </div>
               <Button
                 variant="ghost"
@@ -729,7 +812,9 @@ export default function DnsRecordsClient({
                   name="type"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-medium">Record Type</FormLabel>
+                      <FormLabel className="text-xs font-medium">
+                        Record Type
+                      </FormLabel>
                       <FormControl>
                         <Select
                           value={field.value}
@@ -740,8 +825,12 @@ export default function DnsRecordsClient({
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="A">A (IPv4 Address)</SelectItem>
-                            <SelectItem value="AAAA">AAAA (IPv6 Address)</SelectItem>
-                            <SelectItem value="CNAME">CNAME (Alias Hostname)</SelectItem>
+                            <SelectItem value="AAAA">
+                              AAAA (IPv6 Address)
+                            </SelectItem>
+                            <SelectItem value="CNAME">
+                              CNAME (Alias Hostname)
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -760,7 +849,9 @@ export default function DnsRecordsClient({
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex items-center justify-between">
-                        <FormLabel className="text-xs font-medium">Name / Host</FormLabel>
+                        <FormLabel className="text-xs font-medium">
+                          Name / Host
+                        </FormLabel>
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
@@ -795,7 +886,10 @@ export default function DnsRecordsClient({
                         />
                       </FormControl>
                       <p className="text-[11px] font-mono text-muted-foreground">
-                        FQDN: <span className="text-foreground">{getFqdn(field.value, site.domain)}</span>
+                        FQDN:{" "}
+                        <span className="text-foreground">
+                          {getFqdn(field.value, site.domain)}
+                        </span>
                       </p>
                       <FormMessage />
                     </FormItem>
@@ -808,10 +902,14 @@ export default function DnsRecordsClient({
                   name="value"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-medium">Value / Target</FormLabel>
+                      <FormLabel className="text-xs font-medium">
+                        Value / Target
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={typeDescriptions[watchEditType].placeholder}
+                          placeholder={
+                            typeDescriptions[watchEditType].placeholder
+                          }
                           spellCheck={false}
                           autoComplete="off"
                           className="font-mono text-xs bg-background border-border/80"
@@ -819,7 +917,10 @@ export default function DnsRecordsClient({
                         />
                       </FormControl>
                       <p className="text-[11px] text-muted-foreground">
-                        Example: <span className="font-mono text-foreground/80">{typeDescriptions[watchEditType].example}</span>
+                        Example:{" "}
+                        <span className="font-mono text-foreground/80">
+                          {typeDescriptions[watchEditType].example}
+                        </span>
                       </p>
                       <FormMessage />
                     </FormItem>
@@ -833,7 +934,9 @@ export default function DnsRecordsClient({
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex items-center justify-between">
-                        <FormLabel className="text-xs font-medium">TTL (Seconds)</FormLabel>
+                        <FormLabel className="text-xs font-medium">
+                          TTL (Seconds)
+                        </FormLabel>
                         <div className="flex items-center gap-1">
                           {ttlPresets.map((p) => (
                             <button
@@ -870,10 +973,19 @@ export default function DnsRecordsClient({
                     Updated DNS Answer Preview
                   </div>
                   <div className="font-mono text-xs text-foreground truncate">
-                    <span className="text-emerald-400">{getFqdn(watchEditName, site.domain)}.</span>{" "}
-                    <span className="text-muted-foreground">{watchEditTtl || 300}</span> IN{" "}
-                    <span className="font-bold text-amber-400">{watchEditType}</span>{" "}
-                    <span className="text-foreground">{watchEditValue || "..."}</span>
+                    <span className="text-emerald-400">
+                      {getFqdn(watchEditName, site.domain)}.
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      {watchEditTtl || 300}
+                    </span>{" "}
+                    IN{" "}
+                    <span className="font-bold text-amber-400">
+                      {watchEditType}
+                    </span>{" "}
+                    <span className="text-foreground">
+                      {watchEditValue || "..."}
+                    </span>
                   </div>
                 </div>
 
@@ -916,7 +1028,8 @@ export default function DnsRecordsClient({
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-150"
           onClick={(e) => {
-            if (e.target === e.currentTarget && !isDeleting) setRecordToDelete(null);
+            if (e.target === e.currentTarget && !isDeleting)
+              setRecordToDelete(null);
           }}
         >
           <div className="w-full max-w-md rounded-xl border border-border/80 bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150 space-y-4">
@@ -929,13 +1042,18 @@ export default function DnsRecordsClient({
                   Delete DNS Record
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Are you sure you want to delete this record? Queries for this host will no longer resolve:
+                  Are you sure you want to delete this record? Queries for this
+                  host will no longer resolve:
                 </p>
                 <div className="p-2.5 rounded bg-background border border-border/60 font-mono text-xs flex items-center gap-2">
                   <RecordTypeBadge type={recordToDelete.type} />
-                  <span className="font-semibold text-foreground">{getFqdn(recordToDelete.name, site.domain)}</span>
+                  <span className="font-semibold text-foreground">
+                    {getFqdn(recordToDelete.name, site.domain)}
+                  </span>
                   <span className="text-muted-foreground">&rarr;</span>
-                  <span className="text-muted-foreground truncate">{recordToDelete.value}</span>
+                  <span className="text-muted-foreground truncate">
+                    {recordToDelete.value}
+                  </span>
                 </div>
               </div>
               <button

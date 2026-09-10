@@ -28,7 +28,7 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const digCommand = "dig @127.0.0.1 -p 8001 example.com A";
+  const digCommand = "dig @ns1.mdp.dpdns.org example.com A";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(digCommand);
@@ -47,7 +47,10 @@ export default function Home() {
   // Close profile dropdown on click outside or escape key
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
         setIsProfileOpen(false);
       }
     };
@@ -64,10 +67,23 @@ export default function Home() {
     };
   }, []);
 
-  const sampleResponses: Record<"A" | "AAAA" | "CNAME", { name: string; type: string; value: string; ttl: number }> = {
+  const sampleResponses: Record<
+    "A" | "AAAA" | "CNAME",
+    { name: string; type: string; value: string; ttl: number }
+  > = {
     A: { name: "example.com.", type: "A", value: "93.184.216.34", ttl: 300 },
-    AAAA: { name: "example.com.", type: "AAAA", value: "2606:2800:220:1:248:1893:25c8:1946", ttl: 300 },
-    CNAME: { name: "www.example.com.", type: "CNAME", value: "example.com.", ttl: 300 },
+    AAAA: {
+      name: "example.com.",
+      type: "AAAA",
+      value: "2606:2800:220:1:248:1893:25c8:1946",
+      ttl: 300,
+    },
+    CNAME: {
+      name: "www.example.com.",
+      type: "CNAME",
+      value: "example.com.",
+      ttl: 300,
+    },
   };
 
   return (
@@ -81,10 +97,10 @@ export default function Home() {
                 <Globe2 className="h-4 w-4" />
               </span>
               <span className="text-base font-semibold tracking-tight">
-                Route<span className="text-muted-foreground font-normal">DNS</span>
+                Route
+                <span className="text-muted-foreground font-normal">DNS</span>
               </span>
             </Link>
-
           </div>
 
           <div className="flex items-center gap-3">
@@ -262,7 +278,10 @@ export default function Home() {
       </section>
 
       {/* Interactive DNS Engine Demo & Preview */}
-      <section id="records" className="mx-auto max-w-6xl px-6 py-20 border-b border-border/40">
+      <section
+        id="records"
+        className="mx-auto max-w-6xl px-6 py-20 border-b border-border/40"
+      >
         <div className="flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground bg-muted/30">
             <Terminal className="h-3.5 w-3.5 text-foreground" />
@@ -272,7 +291,8 @@ export default function Home() {
             Fast, Database-Backed DNS Resolution
           </h2>
           <p className="mt-3 max-w-xl text-sm md:text-base text-muted-foreground">
-            Queries sent to the Go DNS server query the database and return authoritative answers with sub-millisecond overhead.
+            Queries sent to the Go DNS server query the database and return
+            authoritative answers with sub-millisecond overhead.
           </p>
         </div>
 
@@ -293,10 +313,11 @@ export default function Home() {
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}
-                  className={`px-3 py-1 text-xs font-mono font-medium rounded-md transition-all ${activeTab === t
-                    ? "bg-foreground text-background shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                    }`}
+                  className={`px-3 py-1 text-xs font-mono font-medium rounded-md transition-all ${
+                    activeTab === t
+                      ? "bg-foreground text-background shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {t} Record
                 </button>
@@ -308,18 +329,25 @@ export default function Home() {
           <div className="p-6 font-mono text-xs md:text-sm leading-relaxed space-y-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <span className="text-emerald-500">$</span>
-              <span>dig @127.0.0.1 -p 8001 {sampleResponses[activeTab].name} {activeTab}</span>
+              <span>
+                dig @ns1.mdp.dpdns.org {sampleResponses[activeTab].name}{" "}
+                {activeTab}
+              </span>
             </div>
 
             <div className="rounded-lg bg-background/90 p-4 border border-border/60 space-y-2 text-muted-foreground">
               <p className="text-muted-foreground/70">
-                ; &lt;&lt;&gt;&gt; DiG 9.10.6 &lt;&lt;&gt;&gt; @127.0.0.1 -p 8001 {sampleResponses[activeTab].name} {activeTab}
+                ; &lt;&lt;&gt;&gt; DiG 9.10.6 &lt;&lt;&gt;&gt;
+                @ns1.mdp.dpdns.org {sampleResponses[activeTab].name} {activeTab}
               </p>
               <p className="text-muted-foreground/70">
-                ;; Got answer: HEADER; opcode: QUERY, status: <span className="text-emerald-400 font-semibold">NOERROR</span>, id: 48291
+                ;; Got answer: HEADER; opcode: QUERY, status:{" "}
+                <span className="text-emerald-400 font-semibold">NOERROR</span>,
+                id: 48291
               </p>
               <p className="text-muted-foreground/70">
-                ;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 1
+                ;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 2,
+                ADDITIONAL: 1
               </p>
 
               <div className="pt-2 border-t border-border/40 text-foreground">
@@ -327,17 +355,25 @@ export default function Home() {
                   ;; ANSWER SECTION:
                 </p>
                 <div className="flex flex-wrap items-center gap-4 bg-muted/40 p-2.5 rounded border border-border/40">
-                  <span className="text-foreground font-semibold">{sampleResponses[activeTab].name}</span>
-                  <span className="text-muted-foreground">{sampleResponses[activeTab].ttl}</span>
+                  <span className="text-foreground font-semibold">
+                    {sampleResponses[activeTab].name}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {sampleResponses[activeTab].ttl}
+                  </span>
                   <span className="text-muted-foreground">IN</span>
-                  <span className="font-bold text-amber-500">{sampleResponses[activeTab].type}</span>
-                  <span className="text-emerald-400 font-mono">{sampleResponses[activeTab].value}</span>
+                  <span className="font-bold text-amber-500">
+                    {sampleResponses[activeTab].type}
+                  </span>
+                  <span className="text-emerald-400 font-mono">
+                    {sampleResponses[activeTab].value}
+                  </span>
                 </div>
               </div>
 
               <div className="pt-2 border-t border-border/40 text-muted-foreground/80 text-xs">
                 <p>;; Query time: 0.82 msec</p>
-                <p>;; SERVER: 127.0.0.1#8001(127.0.0.1)</p>
+                <p>;; SERVER: ns1.mdp.dpdns.org#53(ns1.mdp.dpdns.org)</p>
                 <p>;; WHEN: {new Date().toUTCString()}</p>
               </div>
             </div>
@@ -345,14 +381,17 @@ export default function Home() {
         </div>
       </section>
 
-
       {/* CTA Section */}
-      <section id="quickstart" className="mx-auto max-w-4xl px-6 py-24 text-center">
+      <section
+        id="quickstart"
+        className="mx-auto max-w-4xl px-6 py-24 text-center"
+      >
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-foreground">
           Ready to manage your DNS?
         </h2>
         <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-sm md:text-base">
-          Sign up to register your domains, verify nameserver delegation, and publish DNS records in seconds.
+          Sign up to register your domains, verify nameserver delegation, and
+          publish DNS records in seconds.
         </p>
         <div className="mt-8 flex justify-center gap-3">
           {session?.user ? (
@@ -389,22 +428,37 @@ export default function Home() {
             <span>RouteDNS &copy; {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="#features" className="hover:text-foreground transition-colors">
+            <a
+              href="#features"
+              className="hover:text-foreground transition-colors"
+            >
               Features
             </a>
-            <a href="#architecture" className="hover:text-foreground transition-colors">
+            <a
+              href="#architecture"
+              className="hover:text-foreground transition-colors"
+            >
               Architecture
             </a>
             {session?.user ? (
-              <Link href="/user/dashboard" className="hover:text-foreground transition-colors">
+              <Link
+                href="/user/dashboard"
+                className="hover:text-foreground transition-colors"
+              >
                 Dashboard
               </Link>
             ) : (
               <>
-                <Link href="/signin" className="hover:text-foreground transition-colors">
+                <Link
+                  href="/signin"
+                  className="hover:text-foreground transition-colors"
+                >
                   Sign In
                 </Link>
-                <Link href="/signup" className="hover:text-foreground transition-colors">
+                <Link
+                  href="/signup"
+                  className="hover:text-foreground transition-colors"
+                >
                   Sign Up
                 </Link>
               </>
