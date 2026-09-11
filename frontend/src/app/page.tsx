@@ -24,7 +24,7 @@ export default function Home() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<"A" | "AAAA" | "CNAME">("A");
+  const [activeTab, setActiveTab] = useState<"A" | "AAAA" | "CNAME" | "TXT">("A");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ export default function Home() {
   }, []);
 
   const sampleResponses: Record<
-    "A" | "AAAA" | "CNAME",
+    "A" | "AAAA" | "CNAME" | "TXT",
     { name: string; type: string; value: string; ttl: number }
   > = {
     A: { name: "example.com.", type: "A", value: "93.184.216.34", ttl: 300 },
@@ -82,6 +82,12 @@ export default function Home() {
       name: "www.example.com.",
       type: "CNAME",
       value: "example.com.",
+      ttl: 300,
+    },
+    TXT: {
+      name: "example.com.",
+      type: "TXT",
+      value: '"v=spf1 include:_spf.google.com ~all"',
       ttl: 300,
     },
   };
@@ -309,7 +315,7 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-1 bg-background/80 p-1 rounded-lg border border-border/60">
-              {(["A", "AAAA", "CNAME"] as const).map((t) => (
+              {(["A", "AAAA", "CNAME", "TXT"] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}

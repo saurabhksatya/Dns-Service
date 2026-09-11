@@ -105,6 +105,7 @@ enum DnsRecordType {
   A
   AAAA
   CNAME
+  TXT
 }
 
 enum SiteStatus {

@@ -16,7 +16,7 @@ A polyglot DNS-hosting platform with a Next.js frontend and Go-based DNS server/
 - **User authentication** via better-auth (email/password)
 - **Site registration** — add domains to your account
 - **NS verification** — verify ownership by delegating to RouteDNS nameservers (`ns1.example.com`, `ns2.example.com`)
-- **DNS record management** — A, AAAA, CNAME records (DB-only via Next.js server actions)
+- **DNS record management** — A, AAAA, CNAME, TXT records (DB-only via Next.js server actions)
 - **Dashboard** — view site status (PENDING / VERIFIED / FAILED), last check time, failure reasons
 - **Real DNS server** — Go-based authoritative DNS server on port 8001
 
@@ -131,7 +131,7 @@ dns-distributed/
 - Schema: `frontend/prisma/schema.prisma`
 - After editing: `pnpm prisma generate && pnpm prisma migrate dev --name <name>`
 - Fresh DB: `pnpm prisma migrate deploy`
-- Models: `Site` (status: PENDING/VERIFIED/FAILED), `DnsRecord` (type: A/AAAA/CNAME), `User`, `Account`, `Session`
+- Models: `Site` (status: PENDING/VERIFIED/FAILED), `DnsRecord` (type: A/AAAA/CNAME/TXT), `User`, `Account`, `Session`
 - Relations: `Site.dnsRecords` (cascade delete), `Site.userId` → `User.id`
 
 ## Verification Commands

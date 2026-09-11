@@ -43,7 +43,7 @@ Backend must be running for the dashboard's Verify button (frontend calls `http:
 
 - Schema: `frontend/prisma/schema.prisma`; `prisma.config.ts` loads `DATABASE_URL` from `frontend/.env` via dotenv. Client generator `prisma-client` outputs TS to `src/generated/prisma`.
 - After editing schema: `pnpm prisma generate` then `pnpm prisma migrate dev --name <name>` (applies + creates SQL). Fresh DB: `pnpm prisma migrate deploy`.
-- `Site` model + `SiteStatus` enum (`PENDING`/`VERIFIED`/`FAILED`) and `DnsRecord` model + `DnsRecordType` enum (`A`/`AAAA`/`CNAME`) already exist; `id`/timestamps have defaults. `Site` has a `dnsRecords` relation (`DnsRecord.siteId` → `Site.id`, cascade delete). Table names use lowercase `@@map("...")`; timestamps are `@db.Timestamptz(3)`.
+- `Site` model + `SiteStatus` enum (`PENDING`/`VERIFIED`/`FAILED`) and `DnsRecord` model + `DnsRecordType` enum (`A`/`AAAA`/`CNAME`/`TXT`) already exist; `id`/timestamps have defaults. `Site` has a `dnsRecords` relation (`DnsRecord.siteId` → `Site.id`, cascade delete). Table names use lowercase `@@map("...")`; timestamps are `@db.Timestamptz(3)`.
 
 ## Verification commands
 

@@ -55,7 +55,7 @@ import {
 } from "lucide-react";
 
 const recordSchema = z.object({
-  type: z.enum(["A", "AAAA", "CNAME"]),
+  type: z.enum(["A", "AAAA", "CNAME", "TXT"]),
   name: z.string().min(1, "Name is required"),
   value: z.string().min(1, "Value is required"),
   ttl: z
@@ -85,6 +85,11 @@ const typeDescriptions: Record<
     placeholder: "target.example.net",
     example: "cdn.example.com",
   },
+  TXT: {
+    help: "Holds arbitrary text data for SPF, DKIM, or verification",
+    placeholder: "v=spf1 include:_spf.example.com ~all",
+    example: "v=spf1 include:_spf.google.com ~all",
+  },
 };
 
 const ttlPresets = [
@@ -99,6 +104,7 @@ function RecordTypeBadge({ type }: { type: DnsRecordRow["type"] }) {
     A: "bg-sky-500/10 text-sky-400 border-sky-500/20",
     AAAA: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
     CNAME: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    TXT: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   };
   return (
     <span
@@ -132,9 +138,9 @@ export default function DnsRecordsClient({
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"ALL" | "A" | "AAAA" | "CNAME">(
-    "ALL",
-  );
+  const [typeFilter, setTypeFilter] = useState<
+    "ALL" | "A" | "AAAA" | "CNAME" | "TXT"
+  >("ALL");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Add Form
@@ -195,6 +201,7 @@ export default function DnsRecordsClient({
       a: records.filter((r) => r.type === "A").length,
       aaaa: records.filter((r) => r.type === "AAAA").length,
       cname: records.filter((r) => r.type === "CNAME").length,
+      txt: records.filter((r) => r.type === "TXT").length,
     };
   }, [records]);
 
@@ -349,6 +356,14 @@ export default function DnsRecordsClient({
                 {recordStats.cname}
               </div>
             </div>
+            <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-1.5 text-center">
+              <div className="text-[10px] uppercase font-semibold text-emerald-400">
+                TXT
+              </div>
+              <div className="text-sm font-bold font-mono text-emerald-400">
+                {recordStats.txt}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -397,6 +412,9 @@ export default function DnsRecordsClient({
                                 </SelectItem>
                                 <SelectItem value="CNAME">
                                   CNAME (Alias Hostname)
+                                </SelectItem>
+                                <SelectItem value="TXT">
+                                  TXT (Text Record)
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -635,7 +653,7 @@ export default function DnsRecordsClient({
               </div>
 
               <div className="flex items-center gap-1 self-start sm:self-auto bg-card p-1 rounded-lg border border-border/80 text-xs">
-                {(["ALL", "A", "AAAA", "CNAME"] as const).map((t) => (
+                {(["ALL", "A", "AAAA", "CNAME", "TXT"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setTypeFilter(t)}
@@ -664,7 +682,7 @@ export default function DnsRecordsClient({
                   <p className="text-xs text-muted-foreground mt-1">
                     {searchQuery
                       ? "Try changing your search term or type filter."
-                      : "Use the form on the left to add your first A, AAAA or CNAME record."}
+                      : "Use the form on the left to add your first A, AAAA, CNAME, or TXT record."}
                   </p>
                 </div>
               ) : (
@@ -830,6 +848,9 @@ export default function DnsRecordsClient({
                             </SelectItem>
                             <SelectItem value="CNAME">
                               CNAME (Alias Hostname)
+                            </SelectItem>
+                            <SelectItem value="TXT">
+                              TXT (Text Record)
                             </SelectItem>
                           </SelectContent>
                         </Select>

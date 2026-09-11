@@ -133,7 +133,7 @@ export async function deleteSite(siteId: string): Promise<ActionResult> {
 export type DnsRecordRow = {
   id: string;
   siteId: string;
-  type: "A" | "AAAA" | "CNAME";
+  type: "A" | "AAAA" | "CNAME" | "TXT";
   name: string;
   value: string;
   ttl: number;
@@ -156,7 +156,7 @@ async function getSiteOwnership(siteId: string) {
 export async function addDnsRecord(
   siteId: string,
   data: {
-    type: "A" | "AAAA" | "CNAME";
+    type: "A" | "AAAA" | "CNAME" | "TXT";
     name: string;
     value: string;
     ttl?: number;
@@ -188,7 +188,7 @@ export async function updateDnsRecord(
   recordId: string,
   siteId: string,
   data: {
-    type: "A" | "AAAA" | "CNAME";
+    type: "A" | "AAAA" | "CNAME" | "TXT";
     name: string;
     value: string;
     ttl?: number;

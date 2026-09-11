@@ -132,23 +132,44 @@ func answersForSite(ctx context.Context, site *Site, labels []string, idx int, q
 					AAAA: ip,
 				})
 			}
-		case rec.Type == "CNAME" && (qtype == dns.TypeCNAME || qtype == dns.TypeA || qtype == dns.TypeAAAA):
+		case rec.Type == "CNAME" && (qtype == dns.TypeCNAME || qtype == dns.TypeA || qtype == dns.TypeAAAA || qtype == dns.TypeTXT):
 			target := dns.Fqdn(rec.Value)
 			rrs = append(rrs, &dns.CNAME{
 				Hdr:    dns.RR_Header{Name: owner, Rrtype: dns.TypeCNAME, Class: dns.ClassINET, Ttl: ttl},
 				Target: target,
 			})
 			cnameTarget = target
+		case rec.Type == "TXT" && qtype == dns.TypeTXT:
+			val := rec.Value
+			if len(val) >= 2 && strings.HasPrefix(val, "\"") && strings.HasSuffix(val, "\"") {
+				val = val[1 : len(val)-1]
+			}
+			rrs = append(rrs, &dns.TXT{
+				Hdr: dns.RR_Header{Name: owner, Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: ttl},
+				Txt: splitTXT(val),
+			})
 		}
 	}
 
-	if cnameTarget != "" && (qtype == dns.TypeA || qtype == dns.TypeAAAA) {
+	if cnameTarget != "" && (qtype == dns.TypeA || qtype == dns.TypeAAAA || qtype == dns.TypeTXT) {
 		if chain := resolveTarget(ctx, cnameTarget, qtype); chain != nil {
 			rrs = append(rrs, chain...)
 		}
 	}
 
 	return rrs
+}
+
+func splitTXT(s string) []string {
+	var chunks []string
+	for len(s) > 255 {
+		chunks = append(chunks, s[:255])
+		s = s[255:]
+	}
+	if len(s) > 0 || len(chunks) == 0 {
+		chunks = append(chunks, s)
+	}
+	return chunks
 }
 
 func resolveTarget(ctx context.Context, target string, qtype uint16) []dns.RR {
