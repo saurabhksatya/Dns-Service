@@ -8,7 +8,7 @@ import { z } from "zod";
 import { authClient } from "@/lib/authClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { AuthNavbar } from "@/components/auth-navbar";
 import {
   Form,
   FormControl,
@@ -25,7 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Globe2, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const signupSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -60,122 +60,117 @@ export default function SignupClient() {
       return;
     }
 
-    router.push("/user/dashboard");
+    try {
+      sessionStorage.setItem("totp_setup_pwd", values.password);
+    } catch { }
+
+    router.push("/two-factor/setup");
     router.refresh();
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-        <ThemeToggle />
-      </div>
+    <div className="min-h-screen flex flex-col bg-background">
+      <AuthNavbar mode="signup" />
 
-      <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-6">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground text-background font-bold text-sm tracking-tight transition-transform group-hover:scale-105">
-            <Globe2 className="h-4 w-4" />
-          </span>
-          <span className="text-base font-semibold tracking-tight">
-            Route<span className="text-muted-foreground font-normal">DNS</span>
-          </span>
-        </Link>
-
-        <Card className="w-full border-border/80 bg-card shadow-xl">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl font-bold tracking-tight">
-              Create Account
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Sign up to start hosting authoritative DNS zones
-            </CardDescription>
-          </CardHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <CardContent className="flex flex-col gap-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs">Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="John Doe"
-                          className="bg-background border-border/80 text-xs"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center">
+          <Card className="w-full border-border/80 bg-card shadow-xl">
+            <CardHeader className="space-y-1.5 pb-4 px-4 sm:px-6">
+              <CardTitle className="text-2xl font-bold tracking-tight">
+                Create Account
+              </CardTitle>
+              <CardDescription className="text-sm">
+                Sign up to start hosting authoritative DNS zones
+              </CardDescription>
+            </CardHeader>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <CardContent className="flex flex-col gap-4 px-4 sm:px-6">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="John Doe"
+                            className="bg-background border-border/80 text-sm h-10 px-3"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="user@example.com"
+                            className="bg-background border-border/80 text-sm h-10 px-3"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="••••••••"
+                            className="bg-background border-border/80 text-sm h-10 px-3"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {form.formState.errors.root && (
+                    <p className="text-sm font-medium text-destructive">
+                      {form.formState.errors.root.message}
+                    </p>
                   )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="user@example.com"
-                          className="bg-background border-border/80 text-xs"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs">Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••••"
-                          className="bg-background border-border/80 text-xs"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {form.formState.errors.root && (
-                  <p className="text-xs font-medium text-destructive">
-                    {form.formState.errors.root.message}
-                  </p>
-                )}
-                <Button
-                  type="submit"
-                  className="w-full bg-foreground text-background hover:opacity-90 text-xs"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting && (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                  )}
-                  Sign Up
-                </Button>
-              </CardContent>
-              <CardFooter className="flex justify-center border-t border-border/60 pt-4">
-                <p className="text-xs text-muted-foreground">
-                  Already have an account?{" "}
-                  <Link
-                    href="/signin"
-                    className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+                  <Button
+                    type="submit"
+                    className="w-full bg-foreground text-background hover:opacity-90 text-sm font-medium h-10 mt-2"
+                    disabled={form.formState.isSubmitting}
                   >
-                    Sign in
-                  </Link>
-                </p>
-              </CardFooter>
-            </form>
-          </Form>
-        </Card>
-      </div>
+                    {form.formState.isSubmitting && (
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    )}
+                    Sign Up
+                  </Button>
+                </CardContent>
+                <CardFooter className="flex justify-center border-t border-border/60 pt-4 mt-6">
+                  <p className="text-sm text-muted-foreground">
+                    Already have an account?{" "}
+                    <Link
+                      href="/signin"
+                      className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+                    >
+                      Sign in
+                    </Link>
+                  </p>
+                </CardFooter>
+              </form>
+            </Form>
+          </Card>
+        </div>
+      </main>
     </div>
   );
 }

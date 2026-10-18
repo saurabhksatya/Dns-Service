@@ -1,5 +1,6 @@
 allowBuilds:
   '@prisma/engines': true
+  bcrypt: set this to true or false
   prisma: true
   sharp: true
   unrs-resolver: true

@@ -19,6 +19,10 @@ export default async function SiteConfigPage({
     redirect("/signin");
   }
 
+  if (!session.user.twoFactorEnabled) {
+    redirect("/two-factor/setup");
+  }
+
   const site = await prisma.site.findUnique({ where: { id: siteId } });
   if (!site || site.userId !== session.user.id) {
     notFound();

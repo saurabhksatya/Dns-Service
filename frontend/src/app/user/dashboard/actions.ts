@@ -15,7 +15,7 @@ type VerifyResult =
 
 async function getSessionUser() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) return null;
+  if (!session?.user?.id || !session.user.twoFactorEnabled) return null;
   return session;
 }
 

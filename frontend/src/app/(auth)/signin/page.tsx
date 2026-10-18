@@ -8,6 +8,9 @@ export const dynamic = "force-dynamic";
 export default async function SigninPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session?.user) {
+    if (!session.user.twoFactorEnabled) {
+      redirect("/two-factor/setup");
+    }
     redirect("/user/dashboard");
   }
 

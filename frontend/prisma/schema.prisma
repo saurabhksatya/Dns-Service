@@ -20,9 +20,11 @@ model User {
   image         String?
   createdAt     DateTime  @db.Timestamptz(3)
   updatedAt     DateTime  @db.Timestamptz(3)
-  sessions      Session[]
-  accounts      Account[]
-  sites         Site[]
+  twoFactorEnabled Boolean?    @default(false)
+  sessions         Session[]
+  accounts         Account[]
+  twofactors       TwoFactor[]
+  sites            Site[]
 
   @@map("user")
 }
@@ -69,6 +71,21 @@ model Verification {
   updatedAt  DateTime @db.Timestamptz(3)
 
   @@map("verification")
+}
+
+model TwoFactor {
+  id                      String    @id
+  secret                  String
+  backupCodes             String
+  userId                  String
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified                Boolean?  @default(true)
+  failedVerificationCount Int?      @default(0)
+  lockedUntil             DateTime? @db.Timestamptz(3)
+
+  @@index([secret])
+  @@index([userId])
+  @@map("twoFactor")
 }
 
 model Site {

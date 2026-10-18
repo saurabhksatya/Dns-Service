@@ -12,6 +12,10 @@ export default async function DashboardPage() {
     redirect("/signin");
   }
 
+  if (!session.user.twoFactorEnabled) {
+    redirect("/two-factor/setup");
+  }
+
   const sites = await prisma.site.findMany({
     where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
